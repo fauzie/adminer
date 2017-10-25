@@ -42,7 +42,7 @@ class AdminerQuickFilterTables
 			    cursor: pointer;
 			}
 		</style>
-		<script type="text/javascript" src="http://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+		<script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 		<script type="text/javascript">
 			jQuery(document).ready(function($){
 				$('#tables').prepend('<div class="quick-filter"><input id="quick" placeholder="Filter tables"><div class="clear quick-clear">X</div></div>');

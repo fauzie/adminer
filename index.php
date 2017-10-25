@@ -9,7 +9,7 @@ function adminer_object() {
     }
 
     $plugins = array(
-        new AdminerDatabaseHide(array('information_schema')),
+        new AdminerDatabaseHide(array('information_schema','performance_schema','mysql')),
         new AdminerDumpZip,
         new AdminerEditForeign,
         new AdminerEditTextarea,
