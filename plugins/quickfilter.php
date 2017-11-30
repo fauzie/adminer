@@ -41,7 +41,21 @@ class AdminerQuickFilterTables
 			    font-size: 9px;
 			    cursor: pointer;
 			}
+			body>#menu {
+				width: 250px;
+			}
+			body>#menu p.links a {
+                text-align: center;
+			}
+			body>#menu p.links a>span {
+			    font-size: 12px;
+			}
+			body>#content {
+			    margin-left: 260px;
+			    margin-right: 20px;
+			}
 		</style>
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 		<script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 		<script type="text/javascript">
 			jQuery(document).ready(function($){
@@ -62,6 +76,28 @@ class AdminerQuickFilterTables
 						$('#tables a').show();
 					}
 				}).val(localStorage.getItem('filter')).trigger('keypress');
+				if ($('select[name^="Collation"]').length)
+    				$('select[name^="Collation"]').val('utf8_general_ci');
+    				
+    			if ($('select[name*="collation"]').length)
+    				$('select[name*="collation"]').val('utf8_general_ci');
+    			
+    			$('#menu p.links a').each(function(i,el) {
+    			    var title = $(this).text();
+    			    $(this).attr('title', title);
+    			    if (i === 0) {
+    			        $(this).html('<span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-terminal fa-stack-1x fa-inverse"></i></span>');
+    			    }
+    			    else if (i === 1) {
+    			        $(this).html('<span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-download fa-stack-1x fa-inverse"></i></span>');
+    			    }
+    			    else if (i === 2) {
+    			        $(this).html('<span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-upload fa-stack-1x fa-inverse"></i></span>');
+    			    }
+    			    else if (i === 3) {
+    			        $(this).html('<span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-plus fa-stack-1x fa-inverse"></i></span>');
+    			    }
+    			});
 			})
 
 		</script>
