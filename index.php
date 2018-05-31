@@ -1,4 +1,7 @@
 <?php
+/**
+ * Packaged by Rizal Fauzie <rizal@fauzie.my.id>
+ */
 function adminer_object() {
     // required to run any plugin
     include_once "./plugins/plugin.php";
@@ -9,20 +12,16 @@ function adminer_object() {
     }
 
     $plugins = array(
-        new AdminerDatabaseHide(array('information_schema','performance_schema','mysql')),
+		new AdminerLoginServers(array('localhost','127.0.0.1')),
+        new AdminerDatabaseHide(array('information_schema','performance_schema','mysql','sys')),
         new AdminerDumpZip,
         new AdminerEditForeign,
         new AdminerEditTextarea,
         new AdminerEnumOption,
-        new AdminerLoginServers(array('localhost','127.0.0.1')),
-        new AdminerQuickFilterTables
+        new AdminerQuickFilterTables,
+		new AdminerJsonColumn,
+		new AdminerVersionNoverify
     );
-
-    /* It is possible to combine customization and plugins:
-    class AdminerCustomization extends AdminerPlugin {
-    }
-    return new AdminerCustomization($plugins);
-    */
 
     return new AdminerPlugin($plugins);
 }

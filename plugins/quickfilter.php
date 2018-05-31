@@ -10,14 +10,12 @@
  */
 class AdminerQuickFilterTables
 {
-	public function AdminerQuickFilterTables()
-	{
-	}
+	public function AdminerQuickFilterTables() {}
+	
 	public function head()
 	{   
 ?>
-
-		<style>
+		<style<?php echo nonce() ?>>
 		.quick-filter{
 			position: relative;
 		}
@@ -42,7 +40,7 @@ class AdminerQuickFilterTables
 			    cursor: pointer;
 			}
 			body>#menu {
-				width: 250px;
+				width: 280px;
 			}
 			body>#menu p.links a {
                 text-align: center;
@@ -51,13 +49,13 @@ class AdminerQuickFilterTables
 			    font-size: 12px;
 			}
 			body>#content {
-			    margin-left: 260px;
+			    margin-left: 290px;
 			    margin-right: 20px;
 			}
 		</style>
-		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-		<script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-		<script type="text/javascript">
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"<?php echo nonce() ?>>
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"<?php echo nonce() ?>></script>
+		<script<?php echo nonce() ?>>
 			jQuery(document).ready(function($){
 				$('#tables').prepend('<div class="quick-filter"><input id="quick" placeholder="Filter tables"><div class="clear quick-clear">X</div></div>');
 				$('.quick-clear').on('click',function(){
