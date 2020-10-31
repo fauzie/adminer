@@ -13,6 +13,7 @@ function adminer_object() {
     }
     
     // defaults
+    $logo = null;
     $servers = array( '127.0.0.1' => 'localhost' );
     $hiddens = array('information_schema','performance_schema','mysql','sys','test');
     $loginip = array('127.0.0.*');
@@ -24,11 +25,16 @@ function adminer_object() {
         if (isset($configs['hidden'])) {
             $hiddens = array_values($configs['hidden']);
         }
-        if (isset($configs['login'],$configs['login']['ips'])) {
-            $loginip = explode(',', $configs['login']['ips']);
-        }
-        if (isset($configs['login'],$configs['login']['forwarded_for'])) {
-            $proxyip = explode(',', $configs['login']['forwarded_for']);
+        if (!empty($configs['login'])) {
+            if (isset($configs['login']['ips'])) {
+                $loginip = explode(',', $configs['login']['ips']);
+            }
+            if (isset($configs['login']['forwarded_for'])) {
+                $proxyip = explode(',', $configs['login']['forwarded_for']);
+            }
+            if (!empty($configs['login']['logo']) && filter_var($configs['login']['logo'], FILTER_VALIDATE_URL)) {
+                $logo = $configs['login']['logo'];
+            }
         }
         if (isset($configs['password'],$configs['password']['hash'])) {
             $passwrd = $configs['password']['hash'];
@@ -41,7 +47,7 @@ function adminer_object() {
     }
 
     $adminer->plugins = array(
-		new AdminerLoginServers($servers),
+		new AdminerLoginServers($servers,'server',$logo),
         new AdminerDatabaseHide($hiddens),
         new AdminerLoginIp($loginip,$proxyip),
         new AdminerLoginPasswordLess($passwrd),

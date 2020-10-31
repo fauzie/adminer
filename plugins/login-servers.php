@@ -8,15 +8,17 @@
 */
 class AdminerLoginServers {
 	/** @access protected */
-	var $servers, $driver;
+	var $servers, $driver, $logo;
 	
 	/** Set supported servers
 	* @param array array($domain) or array($domain => $description) or array($category => array())
 	* @param string
+	* @param string
 	*/
-	function __construct($servers, $driver = "server") {
+	function __construct($servers, $driver = "server", $logo = null) {
 		$this->servers = $servers;
 		$this->driver = $driver;
+		$this->logo = $logo;
 	}
 	
 	function login($login, $password) {
@@ -36,7 +38,16 @@ class AdminerLoginServers {
 	}
 	
 	function loginForm() {
-		?>
+	if (!empty($this->logo)): ?>
+<img id="login-logo" src="<?php echo $this->logo ?>" style="width:420px;height:auto" />
+<script<?php echo nonce() ?>>
+var content = document.getElementById('content')
+if (content.children.length) {
+	var header = content.getElementsByTagName('h2')
+	if (header.length) header[0].remove()
+}
+</script>
+	<?php endif; ?>
 <table cellspacing="0">
 <tr><th><?php echo lang('Server'); ?><td><input type="hidden" name="auth[driver]" value="<?php echo $this->driver; ?>"><select name="auth[server]"><?php echo optionlist($this->servers, SERVER); ?></select>
 <tr><th><?php echo lang('Username'); ?><td><input id="username" name="auth[username]" value="<?php echo h($_GET["username"]);  ?>">
