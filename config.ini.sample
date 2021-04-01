@@ -6,7 +6,6 @@
 5=test
 
 [servers]
-localhost=127.0.0.1
 docker=172.17.0.1
 
 [login]
