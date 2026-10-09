@@ -49,11 +49,11 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: .                  # Root directory
-          file: ./Dockerfile          # Root Dockerfile
-          platforms: linux/amd64      # Restricts build to AMD64 only
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
           push: true
-          tags: ${{ id.meta.outputs.tags }}
-          labels: ${{ id.meta.outputs.labels }}
-          cache-from: type=gha        # Uses GitHub Actions cache to speed up subsequent builds
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
           cache-to: type=gha,mode=max
