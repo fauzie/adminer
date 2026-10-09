@@ -1,18 +1,59 @@
-name: adminer
+name: Build and Push Docker Image to GHCR
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main  # Triggers the build when code is pushed to the main branch
+    tags:
+      - 'v*'   # Triggers when a version tag is pushed (e.g., v1.0.0)
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-
-  build:
-
+  build-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # Required to upload images to GHCR
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag adminer:$(date +%s)
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Sets up Docker Buildx (required for advanced caching features)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Logs into GitHub Container Registry using the automatic GITHUB_TOKEN
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Automatically extracts metadata (tags, labels) and handles lowercase conversion
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=sha,format=short
+
+      # Builds the image and pushes it to GHCR
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .                  # Root directory
+          file: ./Dockerfile          # Root Dockerfile
+          platforms: linux/amd64      # Restricts build to AMD64 only
+          push: true
+          tags: ${{ id.meta.outputs.tags }}
+          labels: ${{ id.meta.outputs.labels }}
+          cache-from: type=gha        # Uses GitHub Actions cache to speed up subsequent builds
+          cache-to: type=gha,mode=max

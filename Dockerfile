@@ -1,34 +1,16 @@
-FROM php:8-fpm-alpine
+FROM php:7.4-cli-alpine
 
-LABEL maintainer="Rizal Fauzie Ridwan <rizal@fauzie.id>"
+LABEL   maintainer="Rizal Fauzie Ridwan <rizal@fauzie.my.id>"
 
-RUN apk add --no-cache --update libpng libjpeg-turbo icu-libs \
-    gettext freetype libintl libzip nginx git
-    
-RUN apk add --virtual .build-deps libpng-dev libzip-dev icu-dev \
-    libjpeg-turbo-dev libwebp-dev zlib-dev gettext-dev freetype-dev make gcc g++ autoconf
+RUN     apk add --update --no-cache curl icu-libs gettext libintl libzip \
+        && apk add --virtual .build-deps libzip-dev zlib-dev gettext-dev icu-dev make gcc g++ autoconf \
+        && docker-php-source extract \
+        && docker-php-ext-install -j$(nproc) opcache zip pdo_mysql mysqli \
+        && docker-php-source delete \
+        && mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini" \
+        && apk del .build-deps \
+        && mkdir -p /var/www/html
 
-RUN export CFLAGS="$PHP_CFLAGS" CPPFLAGS="$PHP_CPPFLAGS" LDFLAGS="$PHP_LDFLAGS"; \
-    docker-php-source extract; \
-    docker-php-ext-configure gd --with-jpeg --with-freetype; \
-    docker-php-ext-configure intl --enable-intl; \
-    docker-php-ext-install -j$(nproc) \
-    gd gettext intl mysqli zip
+EXPOSE 8080
 
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-
-RUN docker-php-source delete; \
-    apk del .build-deps; \
-    rm -rf /var/cache/apk/*; \
-    rm -rf /tmp/*
-
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY start.sh /start.sh
-
-WORKDIR /var/www/html
-
-EXPOSE 80
-
-STOPSIGNAL SIGQUIT
-
-ENTRYPOINT /start.sh
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "/var/www/html"]

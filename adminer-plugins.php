@@ -51,7 +51,7 @@ if (file_exists("./config.ini")) {
 
 return array(
     new AdminerDatabaseHide($hiddens),
-    new AdminerLoginIp($loginip),
+    new AdminerLoginIp($loginip, $proxyip),
     new AdminerLoginPasswordLess($passwrd),
     new AdminerLoginServers($servers),
     new AdminerEditCalendar(true),
