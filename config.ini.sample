@@ -6,12 +6,9 @@
 5=test
 
 [servers]
-docker=172.17.0.1
+LOCAL=mysql://localhost:3306
 
 [login]
 logo=
 ips=127.0.0.*
 forwarded_for=127.0.0.1
-
-[password]
-hash=

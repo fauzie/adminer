@@ -7,13 +7,7 @@
 
 // defaults
 $logo = null;
-$servers = array(
-    '127.0.0.1' => [
-        'name'   => 'localhost',
-        'server' => '127.0.0.1',
-        'driver' => 'server'
-    ]
-);
+$servers = array();
 $hiddens = array('information_schema','performance_schema','mysql','sys','test');
 $loginip = array('127.0.0.*');
 $proxyip = array();
@@ -35,16 +29,9 @@ if (file_exists("./config.ini")) {
             $logo = $configs['login']['logo'];
         }
     }
-    if (isset($configs['password'],$configs['password']['hash'])) {
-        $passwrd = $configs['password']['hash'];
-    }
     if (isset($configs['servers'])) {
         foreach ($configs['servers'] as $name => $host) {
-            $servers[ $host ] = [
-                'name'   => $name,
-                'server' => $host,
-                'driver' => 'server'
-            ];
+            $servers[ $host ] = $name;
         }
     }
 }
@@ -52,15 +39,19 @@ if (file_exists("./config.ini")) {
 return array(
     new AdminerDatabaseHide($hiddens),
     new AdminerLoginIp($loginip, $proxyip),
-    new AdminerLoginPasswordLess($passwrd),
     new AdminerLoginServers($servers),
+    new Adminer\CopyStructureExport(),
     new AdminerEditCalendar(true),
+    new AdminerEditForeignSearch(50),
     new AdminerEditForeign(10),
     new AdminerDotJs(),
-    new AdminerBeforeUnload(),
     new AdminerDumpZip(),
     new AdminerEditTextarea(),
     new AdminerEnumOption(),
+    new AdminerForeignTooltip(),
+    new AdminerFormatSql(),
+    new AdminerHumanReadableSize(),
+    new AdminerJsonPreview(),
     new AdminerPrettyJsonColumn(),
     new AdminerTableStructure(),
     new AdminerTablesFilter(),
